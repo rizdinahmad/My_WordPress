@@ -8,33 +8,33 @@ pipeline {
 	    
 	             steps {
 		           sh "docker build --build-arg APP_NAME=$DOCKER_IMAGE_NAME -t $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME:$BUILD_NUMBER ."
-	             }
-	         }
+		     }
+		}
 	        stage("push") {
 	     
 	             steps {
 	     	       sh "docker push $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME:$BUILD_NUMBER"
 	             }
-	        }
+		}
 	        stage("deploy") {
 	     
 	             steps {
-		           sh('kubectl apply -f staging-wordpress.yml')
-               sh('sed -i "s/@/$BUILD_NUMBER/g" staging-wordpress.yml')
-               sh('kubectl apply -f staging-wordpress.yml')
+		             sh('kubectl delete -f staging-wordpress.yml')
+			     sh('sed -i "s/@/$BUILD_NUMBER/g" staging-wordpress.yml')
+                             sh('kubectl apply -f staging-wordpress.yml')
 	             }
-	        }
+		}
 	        stage ('Remove Image') {
              
-               steps {
-               sh "docker rmi $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME:$BUILD_NUMBER"
-               }
-          }
+                     steps {
+                             sh "docker rmi $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME:$BUILD_NUMBER"
+                      }
+		}
         	stage('Ingress') {
              
-                steps {
-                sh "kubectl get ingress -n staging"
-                }
-          }
+                     steps {
+                             sh "kubectl get ingress -n staging"
+                     }
+		}
      }
 }
