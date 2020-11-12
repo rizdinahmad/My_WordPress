@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
       - name: wordpress
-        image: 25092018/wordpress:@
+        image: 25092018/stgwordpress:@
         ports:
         - containerPort: 80
         env:
