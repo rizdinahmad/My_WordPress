@@ -2,7 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: wordpress-service
-  namespace: staging
+  namespace: production
 spec:
   ports:
   - port: 80
@@ -15,7 +15,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: wordpress-deployment
-  namespace: Staging
+  namespace: production
   labels:
     app: wordpress-you
 spec:
@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
       - name: wordpress
-        image: 25092018/stgWordPress:@
+        image: 25092018/wordpress:@
         ports:
         - containerPort: 80
         env:
@@ -61,12 +61,12 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: wordpress-ingress
-  namespace: staging
+  namespace: production
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - host: stgwordpress.rizdin.online
+  - host: wordpress.rizdin.online
     http:
       paths:
       #- path: /
