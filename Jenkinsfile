@@ -19,7 +19,6 @@ pipeline {
 	        stage("deploy") {
 	     
 	             steps {
-		             sh('kubectl delete -f staging-wordpress.yml')
 			     sh('sed -i "s/@/$BUILD_NUMBER/g" staging-wordpress.yml')
                              sh('kubectl apply -f staging-wordpress.yml')
 	             }
